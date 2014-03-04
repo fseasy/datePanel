@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang='zn'>
+	<head>
+		<meta charset='utf-8'>
+		<title>DatePanel</title>
+		<link href="datepanel.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<input type="text"  id='date_input'/>
+		<script src="datePanel.js"></script>
+		<script>
+			var dp = new datePanel() ;
+			dp.init() ;
+			var dateInput = document.getElementById('date_input') ;
+			dateInput.onclick = function(){dp.disFn(this)} ; 
+		</script>
+	</body>
+</html>

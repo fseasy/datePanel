@@ -1,0 +1,13 @@
+#dateMainFrame {
+	width : 100px ;
+	height: 120px ;
+	border :  1px solid #6699cc ;
+	box-shadow  : 1 1 1 2 black ;
+	display :  none ;
+}
+#dateTop{
+	width : 98% ;
+	height : 30px ;
+	background: #ddd ;
+	border:thin solid #ccc ;
+}
