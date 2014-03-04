@@ -4,6 +4,9 @@
 			this.width = 120 ;
 			this.mainFrame = document.createElement('div') ;
 			this.top = document.createElement('div') ;
+			this.yearPanel = document.createElement('div') ;
+			this.monthPanel = docoment.createElement('div') ;
+			this.dayPanel = document.createElement('div') ;
 	} ;
 	datePanel.prototype = {
 		init : function(){
@@ -13,6 +16,14 @@
 			document.body.appendChild(this.mainFrame) ;
 
 		} ,
+		initYearPanel :  function(){
+			var now = new Date() ,
+				curYear = now.getFullYear() ,
+				YEARSNUM = 9 ;
+			for(var i = 0 ; i < 4 ; i++){
+				
+			}
+		}
 		clsFn : function(){
 			this.mainFrame.display = 'none' ;
 		} ,
