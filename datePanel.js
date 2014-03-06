@@ -1,5 +1,6 @@
 (function(window,undefined){
 	var year , month , day ;
+		
 	var datePanel = function() {
 			this.height = 100 ;
 			this.width = 120 ;
@@ -8,6 +9,7 @@
 			this.yearPanel = document.createElement('div') ;
 			this.monthPanel = document.createElement('div') ;
 			this.dayPanel = document.createElement('div') ;
+			this.dayHeader = document.createElement('div') ;
 	} ;
 	datePanel.prototype = {
 		init : function(){
@@ -16,6 +18,7 @@
 			this.mainFrame.appendChild(this.top) ;
 			this.initYearPanel() ;
 			this.initMonthPanel() ;
+			this.initDayPanel() ;
 			this.mainFrame.appendChild(this.yearPanel) ;
 			document.body.appendChild(this.mainFrame) ;
 			this.bind() ;
@@ -51,12 +54,54 @@
 				this.yearPanel.insertBefore(this.createPanelItem('year',curYear-i),this.yearPanel.firstChild) ;
 				this.yearPanel.appendChild(this.createPanelItem('year',curYear+i)) ;
 			}
+			this.yearPanel.setAttribute('id','datepanel_yearpanel') ;
 		} ,
 		initMonthPanel : function(){
 			for(var i = 1 ; i <= 12 ; i++){
 				var monthItem = this.createPanelItem('month',i) ;
 				this.monthPanel.appendChild(monthItem) ;
 			}
+			this.monthPanel.setAttribute('id','datepanel_monthpanel') ;
+		},
+		initDayPanel : function(){
+			var DayParseList = ["日","一","二","三","四","五","六"] ;
+			for(var i = 0 ; i< 7 ; i++){
+				var dayHeaderItem = this.createPanelItem('dayHeaderItem',DayParseList[i]) ;
+				this.dayHeader.appendChild(dayHeaderItem) ;
+			}
+			this.dayPanel.appendChild(this.dayHeader) ;
+			this.dayPanel.setAttribute('id','datepanel_daypanel') ;
+		},
+		createDayPanel :  function(){
+			console.log([month]) ;
+			var date = new Date([year,month,"1"].join('/')) ;
+				firstDayOfMonth = date.getDay() ,
+				daysOfMonth = getDaysOfMonth(year,month) ; 
+				dayRow = document.createElement('div') ,
+				rows = 1 ,
+				cols = 0 ;
+			console.log([firstDayOfMonth,daysOfMonth]) ;
+			if(firstDayOfMonth != 0){
+				var whiteSpace = this.createPanelItem('day','') ;
+				for(var i = 0 ; i < firstDayOfMonth ; i++){
+					dayRow.appendChild(whiteSpace) ;
+					cols++ ;
+				}
+			}
+			for(var i = 1 ; i <= daysOfMonth ; i++){
+				var dayItem = this.createPanelItem('day',i) ;
+				if(cols === 7){
+					//one row has full
+					this.dayPanel.appendChild(dayRow) ;
+					cols = 0 ;
+					rows++ ;
+					dayRow = document.createElement('div') ;
+				}
+				dayRow.appendChild(dayItem) ;
+				cols++ ;
+			}
+			this.dayPanel.appendChild(dayRow) ;
+			rows++ ;
 		},
 		clsFn : function(){
 			this.mainFrame.display = 'none' ;
@@ -79,11 +124,14 @@
 					obj.mainFrame.appendChild(obj.monthPanel) ;
 				}
 			} ,
-			this.monthPanel.onclick = function(){
+			this.monthPanel.onclick = function(e){
 				var event = fixEvent(e) ;
 				if(event){
-					month = e.target.innerHTML.slice(0,4) ;
-					
+					month = e.target.innerHTML.slice(0,-1) ;
+					console.log(month) ;
+					obj.mainFrame.removeChild(obj.mainFrame.lastChild) ;
+					obj.createDayPanel() ;
+					obj.mainFrame.appendChild(obj.dayPanel) ;
 				}
 			}
 		}
@@ -106,6 +154,18 @@
 			event.returnValue = false ;
 		}
 		return event ;
+	}
+	function getDaysOfMonth(year,month){
+		var date = new Date([year,month,'1'].join('/')) ;
+		year = parseInt(year) ;
+		month = parseInt(month) ;
+		date.setDate(31) ;
+		if(date.getMonth()+1 !== month){
+			if(date.getDate() === 1) return 30 ;
+			else if(date.getDate() === 3) return 28 ;
+			else return 29 ;
+		}
+		return 31 ; //31 days
 	}
 	window.datePanel = datePanel ;
 
